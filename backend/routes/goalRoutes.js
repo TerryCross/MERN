@@ -1,8 +1,9 @@
+
 import express from 'express';
 import {getGoals, setGoal, updateGoal, deleteGoal} from '../controllers/goalControlled.js';
 
 const router = express.Router()
-
+console.log("goalRoutes.js", "process.env.NODE_ENV",process.env.NODE_ENV);
 router.get('/', getGoals);
 router.post('/', setGoal);
 router.put('/:id', updateGoal);

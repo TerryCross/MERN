@@ -1,0 +1,10 @@
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 296
+ETag: W/"128-/SAkl5yFa7IeJSkz+VfU7DIz+NA"
+Date: Fri, 04 Mar 2022 18:06:47 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+[{"_id":"6222504d107ef92b1ae71e6c","text":"body lies over","createdAt":"2022-03-04T17:45:49.431Z","updatedAt":"2022-03-04T17:45:49.431Z","__v":0},{"_id":"6222509e107ef92b1ae71e6e","text":"your body lies over","createdAt":"2022-03-04T17:47:10.185Z","updatedAt":"2022-03-04T17:47:10.185Z","__v":0}]

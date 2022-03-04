@@ -1,0 +1,4 @@
+PORT = 5000
+NODE_ENV = development
+MONGO_URI = mongodb+srv://tcross:tcross23@cluster0.olike.mongodb.net/tcmong?retryWrites=true&w=majority
+o
