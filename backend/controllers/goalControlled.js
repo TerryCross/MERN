@@ -1,7 +1,7 @@
 
 import asyncHandler from 'express-async-handler';
 //-- allows one to use errorHandler instead of catching missed promises.
-// -- Pass your function as first arg to asyncHandler();
+// -- Pass your function (def) as first arg to asyncHandler();
 
 import Goal from '../model/goalSchema.js';
 
@@ -9,7 +9,7 @@ import Goal from '../model/goalSchema.js';
 // @route GET /api/goals
 //
 const getGoals = asyncHandler(async (req, res) => {
-    const goals = await Goal.find();  // can narrow, this gets all.
+    const goals = await Goal.find({user: req.user.id});  // can narrow, this gets all.
     res.status(200).json(goals);
     //res.status(200).json({at1: "lunch"});
 })
@@ -35,11 +35,10 @@ const setGoal = asyncHandler(async (req, res) => {
 //
 const updateGoal = asyncHandler(async (req, res) => {
     const goal = await Goal.findById(req.params.id);
-    if(!goal){
-        res.status(400);
-        throw new Error("Goal id not found " + req.params.id)
-    }
-    const updatedGoal = await Goal.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    await validateGoalAndId(goal, req, res);
+    const updatedGoal = await Goal.findByIdAndUpdate(
+        req.params.id, req.body, { new: true }
+    );
     res.status(200).json(updatedGoal);       //{at1: `Update goal ${req.params.id}`});
 });
 
@@ -48,14 +47,27 @@ const updateGoal = asyncHandler(async (req, res) => {
 
 const deleteGoal = asyncHandler(async (req, res) => {
     const goal = await Goal.findById(req.params.id);
-    if(!goal){
-        res.status(400);
-        throw new Error("Goal id not found " + req.params.id)
-    }
+    /* if(!goal){
+     *     res.status(400);
+     *     throw new Error("Goal id not found " + req.params.id)
+     * } */
+    await validateGoalAndId(goal, req, res);
     goal.deleteOne();
     //const deletedGoal = await Goal.findOneAndDelete(req.params.id); //, req.body, { new: true });
     res.status(200).json({id: req.params.id});       //{at1: `Update goal ${req.params.id}`});
 });
+
+async function validateGoalAndId(goal, req, res)   {
+    if(!goal){
+        res.status(400);
+        throw new Error("Goal id not found " + req.params.id)
+    }
+    const user = await User.findById(req.params.id);
+    if(!user) { res.status(401);
+        throw new Error("User not found" + JSON.stringify(res)) }
+    if(goal.user.toString() !== user.id) {
+        res.status(401); throw new Error("Wromg user"); }
+}
 
 // See api ref https://mongoosejs.com/docs/api.html#model_Model.findByIdAndDelete
 // see also Model.prototype.deleteOne

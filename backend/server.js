@@ -2,6 +2,7 @@
 import express from 'express';
 import dotenvmod from 'dotenv';
 import router from './routes/goalRoutes.js';
+import userRouter from './routes/userRoutes.js';
 import errorHandler from './middleware/errorMiddleware.js';
 import colors from 'colors';    // changes String.prototype
 import connectDB from './config/db.js'
@@ -15,10 +16,15 @@ connectDB();
 const port = process.env.PORT || 4000;
 
 const app = express();
-// middleware needed for req.body access
+
+// Middleware is inserted with app.use(), needed for req.body access
+// For app.use see http://expressjs.com/en/4x/api.html#app.use
 app.use(express.json());
 //
+
+app.use('/api/users', userRouter);
 app.use('/api/goals', router);
+
 
 app.use(errorHandler); // Overrides the default express error handler
 
